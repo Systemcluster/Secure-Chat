@@ -91,7 +91,7 @@ body {
     color: rgb(232, 0, 100);
 }
 #site-header > .wrapper > #site-subtitle {
-    padding: 0 0 5px 0;
+    padding: 0 0 10px 0;
     text-align: center;
     flex: 0 1 100%;
 }
@@ -107,7 +107,7 @@ body {
     transition: 0.4s;
 }
 
-#site-content > .connection-button-wrapper {
+#site-content > #connection-button-wrapper {
     background: rgb(232, 0, 100);
     flex: 0 0 100%;
     width: 100%;
@@ -116,10 +116,10 @@ body {
     justify-content: center;
     box-shadow: 0 0 5px 1px #b5b5b5;
     padding: 20px 0;
-    
+
     transition:0.4s;
 }
-#site-content > .connection-button-wrapper > .connection-button {
+#site-content > #connection-button-wrapper > .connection-button {
     user-select: none;
     flex: 1 1 auto;
     border-radius: 12px;
@@ -133,14 +133,14 @@ body {
     color: rgba(0,0,0,0.65);
     max-width: 200px;
 }
-#site-content > .connection-button-wrapper > .connection-button:hover {
+#site-content > #connection-button-wrapper > .connection-button:hover {
     cursor: pointer;
     color: black;
 }
-#site-content > .connection-button-wrapper > .connection-button:active {
+#site-content > #connection-button-wrapper > .connection-button:active {
     box-shadow: 0 0 2px 0px rgba(0,0,0,0.8) inset;
 }
-#site-content > .connection-button-wrapper > .connection-button:disabled {
+#site-content > #connection-button-wrapper > .connection-button:disabled {
     color:rgba(0,0,0,0.5);
 }
 #site-content > #info-area {
