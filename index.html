@@ -3,49 +3,53 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta http-equiv="Cache-Control" content="no-store">
+        <!--meta http-equiv="Cache-Control" content="no-store"-->
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Secure Chat (early test)</title>
-        <meta name="description" content="Secure Chat, encrypted client to client messaging.">
-        <link rel="icon" href="/horn.png">
+        <title>Polarity Connection</title>
+        <meta name="description" content="Serverless client to client messaging with WebRTC.">
 
-        <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Lobster:400&amp;subset=all">
-        <link rel="stylesheet" href="./main.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lobster:400">
+        <link rel="stylesheet" href="./base.css">
+        <link rel="stylesheet" href="./structure.css">
+        <link rel="stylesheet" href="./elements.css">
 
-        <script src="./lib/adapter.js"></script>
+        <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
         <script src="./lib/lzstring.js"></script>
         <script src="./lib/qr.js"></script>
-        <script src="./main.js"></script>
+
+        <script src="./app.js" async></script>
     </head>
     <body>
-        <div id="site-header">
-            <div class="wrapper">
-                <div id="site-title">
-                    <img src="./horn.png" height="38px" style="margin-bottom:-10px;opacity:0.6;"><a href=".">Secure Chat</a>
-                </div>
-                <div id="site-subtitle">
-                    Early test version, <a href="http://caniuse.com/#feat=rtcpeerconnection">only works in certain browsers</a>.
-                </div>
+        <header>
+            <a id="site-title" href="." role="title">
+                Polarity Connection
+            </a>
+            <div id="site-subtitle" role="subtitle">
+                It... It's not like I want to make connections simple or anything... ≧﹏≦
             </div>
-        </div>
-        <div id="site-content">
-            <div class="spacer" id="upper-spacer"></div>
-            <div id="connection-button-wrapper">
-                <button class="connection-button" id="button-startsession">Start Session</button>
-                <button class="connection-button" id="button-joinsession">Join Session</button>
-            </div>
-            <div id="info-area"><div id="intro-text">Text chat &bullet; <span class="featureplans">Audio chat &bullet; Video chat &bullet; File transfer &bullet; Optional PGP encryption</span> &bullet; Private and secure</div></div>
-            <div id="chat-area"></div>
-            <div class="spacer" id="lower-spacer"></div>
-        </div>
-        <div id="site-footer">
-            <div class="wrapper">
-                <span>&copy; <a href="https://systemcluster.github.io">Christian Sdunek, 2015</a> &bullet;
-                Secure client-to-client chat application utilizing WebRTC &bullet;
-                <a id="complain-text">Click here for complaints!</a>
-                </span>
-            </div>
-        </div>
+        </header>
+        <section id="content">
+            <section id="connection-button-wrapper">
+                <div class="connection-button" id="button-startsession" role="button">Start Session</div>
+                <div class="connection-button" id="button-joinsession" role="button">Join Session</div>
+            </section>
+            <section class="info-area" id="info-area">
+                <span id="intro-text">Text chat <span class="featureplans" title="Planned, not yet implemented features">&bullet; Audio chat &bullet; Video chat &bullet; File transfer</span></span>
+            </section>
+            <noscript>
+                <section class="info-area color-error" id="javascript-missing-text">This application requires JavaScript.</section>
+            </noscript>
+            <section id="chat-area">
+                <section id="chat-log"></section>
+                <section id="chat-inputs"></section>
+            </section>
+        </section>
+        <footer>
+            <span>&copy; <a href="https://systemcluster.github.io">Christian Sdunek</a> &bullet;
+              <span role="description">Serverless client-to-client messaging with WebRTC</span> &bullet;
+            <a href="#">About</a> &bullet; <a href="https://github.com/systemcluster/polarity-connection">Source</a>
+            </span>
+        </footer>
     </body>
 </html>

@@ -1,0 +1,241 @@
+@charset "UTF-8";
+
+body {
+    font-family: "Helvetica Neue", Helvetica, "Open Sans", Arial, sans-serif;
+    font-size: 15px;
+    position: absolute;
+    background: #fefefe url("res/bg.png");
+    color: rgba(0,0,0,0.85);
+    min-height: 400px;
+    min-width: 280px;
+    margin:0;
+    position: absolute;
+    bottom: 0;
+    top: 0;
+    left:0;
+    right:0;
+
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-between;
+    align-items: stretch;
+    align-content:stretch;
+}
+
+header {
+    position: relative;
+    flex: 0 0 auto;
+    
+    min-height: 60px;
+    padding: 5px 20px 0 20px;
+    border-top: 4px solid rgb(140, 190, 230);
+    background: #fefefe;
+    z-index: 102;
+
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+}
+header > #site-title {
+    font-size: 1.6rem;
+    line-height: 1.8;
+    flex: 0 1 auto;
+    text-align: center;
+    font-family: "Lobster";
+    display: inline-block;
+    overflow: visible;
+    color: rgb(20,20,20);
+    transition: color 0.225s ease;
+}
+header > #site-title:hover {
+    color: rgb(232, 0, 100);
+}
+header > #site-title::before {
+    content: "";
+    opacity: 0;
+    background: transparent url("res/horn.png") no-repeat;
+    background-size: contain;
+    position: absolute;
+    height: 38px;
+    width: 20px;
+    overflow: visible;
+    margin: 3px 0 0 -18px;
+}
+header > #site-title::after {
+    content: "0.1 alpha";
+    opacity: 0.8;
+    font-family: "Helvetica Neue", Helvetica, "Open Sans", Arial, sans-serif;
+    font-size: 0.82rem;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transform: rotate(20deg);
+    color: rgba(140,190,230, 0.8);
+    margin-right: -38px;
+    margin-top: 3px;
+}
+header > #site-title::selection {
+    background: transparent;
+    color: rgb(232, 0, 100);
+}
+header > #site-subtitle {
+    padding: 0 0 10px 0;
+    text-align: center;
+    flex: 0 1 auto;
+    line-height: 1.2rem;
+    color:rgba(0,0,0,0.3);
+    font-style: italic;
+}
+header > #site-subtitle::before {
+    content: "„";
+    font-size: 1.1rem;
+    margin-right: -3px;
+}
+header > #site-subtitle::after {
+    content: "“";
+    font-size: 1.1rem;
+    margin-left: -3px;
+}
+
+#content {
+    position:relative;
+    padding: 0;
+    margin: 0;
+    flex: 1 1 auto;
+
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-around;
+    align-items: stretch;
+    align-content: stretch;
+
+    z-index: 50;
+}
+#content > #connection-button-wrapper {
+    position: relative;
+    background: rgb(140, 190, 230);//rgb(232, 0, 100);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    flex: 0 0 auto;
+    box-shadow: 0 0 2px 1px #808080 inset;
+    padding: 20px 8px;
+    z-index: 90;
+    color: #f9f9f9;
+
+    transition: 0.6s;
+
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+}
+#content > #connection-button-wrapper > .connection-button {
+    flex: 0 0 20%;
+    display: inline-block;
+    text-align: center;
+    border: none;
+    border-radius: 8px;
+    background: white linear-gradient(rgb(255,255,255), rgb(242,242,242));
+    padding: 12px;
+    margin: 12px;
+    box-shadow: 0 0 2px 0 #b5b5b5;
+    font-family: "Lobster";
+    font-size: 1.1rem;
+    color: rgba(0,0,0,0.68);
+}
+#content > #connection-button-wrapper > .connection-button::selection {
+    background-color: transparent;
+    color:black;
+}
+#content > #connection-button-wrapper > .connection-button:hover {
+    cursor: pointer;
+    color: black;
+    box-shadow: 0 0 2px 1px #b5b5b5;
+}
+#content > #connection-button-wrapper > .connection-button:active {
+    box-shadow: 0 0 2px 0px #b5b5b5 inset;
+    background: linear-gradient(rgb(242,242,242), rgb(252,252,252));
+}
+
+#content .info-area {
+    line-height: 1.2rem;
+    flex: 0 1 auto;
+    text-align: center;
+    box-shadow: 0 0 2px 0px #808080;
+    padding: 20px;
+    background: #fefefe;
+    display:flex;
+    flex-flow: column nowrap;
+    justify-content: space-around;
+    align-items: center;
+    z-index: 70;
+
+    transition: 0.6s;
+}
+
+#content #chat-area {
+    flex: 1 1 100px;
+    z-index: 60;
+    overflow: auto;
+    padding: 10px;
+}
+#content #chat-area #chat-log {
+    margin: 5px;
+}
+.chat-message {
+    border-radius: 3px;
+    border: 1px rgba(181, 181, 181, 0.5) solid;
+    background: rgba(255,255,255,0.2);
+    box-sizing: border-box;
+    margin-bottom: 2px;
+}
+.chat-message-header {
+    border-bottom: 1px rgba(181, 181, 181, 0.5) solid;
+    padding: 3px;
+    color: rgb(232, 0, 100);
+    font-weight: bold;
+}
+.chat-message-content {
+    word-wrap: break-word;
+    padding: 3px;
+}
+
+footer {
+    position: relative;
+    flex: 0 0 auto;
+    box-shadow: 0 0 2px 0 #808080;
+    height: auto;
+    background: #fefefe;
+    color: rgba(0,0,0,0.5);
+    font-size: 0.8rem;
+    padding: 6px 20px;
+    text-align: center;
+    z-index: 101;
+}
+
+
+#infobox {
+    background: rgba(0,0,0,0.8);
+    color: rgba(240, 30, 30, 0.9);
+    padding: 100px 20px;
+    font-size: 1.4rem;
+    position: fixed;
+    width:100vw;
+    height:100vh;
+    text-align: center;
+    z-index: 98;
+    box-sizing: border-box;
+}
+
+
+#intro {
+    color: rgba(0,0,0,0.8);
+}
+.featureplans {
+    color: rgba(0,0,0,0.3);
+}
+

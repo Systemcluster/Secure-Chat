@@ -1,0 +1,56 @@
+@charset "UTF-8";
+
+* {
+    position: relative;
+}
+*:focus {
+    outline: 0;
+}
+::selection { 
+    background-color: rgba(140, 190, 230, 0.1); 
+    color: #888888; 
+}
+
+html {
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    overflow: auto;
+    color: rgb(20,20,20);
+}
+a { 
+    color: rgb(140, 190, 230);
+    text-decoration: none;
+    font-weight: 500;
+}
+a:visited { 
+    color: rgb(140, 190, 230); 
+}
+a:hover { 
+    color: rgb(126, 171, 207);
+}
+
+textarea {
+    resize: none;
+    margin: 10px 0;
+    padding: 5px;
+    width: 100%;
+    height: auto;
+    border-radius: 3px;
+    border: 1px rgba(181, 181, 181, 0.5) solid;
+    background: rgba(255,255,255,0.2);
+    color: rgb(126, 171, 207);
+    box-sizing: border-box;
+    min-height: 60px;
+}
+
+
+.color-error {
+    color: rgb(220, 30, 30);
+}
+.color-important {
+    color: rgba(200, 80, 80, 0.8);
+}
+

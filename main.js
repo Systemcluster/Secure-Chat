@@ -1,23 +1,22 @@
 "use strict";
 
-// convinience functions
-
 function id(e) { return document.getElementById(e); }
 function op(e) { console.log(e); }
 
-var infoboxelem = document.createElement("div");
-infoboxelem.style.display = "none";
-infoboxelem.id = "infobox";
-function infobox(message) {
-    infoboxelem.style.display = "block";
-    infoboxelem.innerHTML = message;
-    document.body.appendChild(infoboxelem);
-    infoboxelem.addEventListener("click", function(e) {
-        infoboxelem.remove();
-    });
-}
 
-// WebRTC
+var infobox = function(message) {
+    if(infobox.infoboxelem === undefined) {
+        infobox.infoboxelem = document.createElement("div");
+        infobox.infoboxelem.style.display = "none";
+        infobox.infoboxelem.id = "infobox";
+    }
+    infobox.infoboxelem.style.display = "block";
+    infobox.infoboxelem.innerHTML = message;
+    document.body.appendChild(infobox.infoboxelem);
+    infobox.infoboxelem.addEventListener("click", function(e) {
+        infobox.infoboxelem.remove();
+    });
+};
 
 var configuration = {
     iceServers: [
@@ -30,21 +29,23 @@ var configuration = {
     ]
 };
 var connection = new RTCPeerConnection(configuration);
-console.log(connection);
 connection.onicecandidate = function(e) {
-    if(e.candidate) {
-        op(e);
+    if(e.candidate) { // still gathering candidates here...
+    }
+    else { // candidates gathered
     }
 };
 connection.onnegotiationneeded = function(e) {
+    // nothing to negotiate
     op(e);
 };
+connection.onstatechange = function(e) {
+    op(e);
+}
 
 var sendchannel = connection.createDataChannel("sendDataChannel", {
     ordered: true,
     protocol: "SCTP"
-    //negotiated: true
-    //id: something
 });
 sendchannel.onerror = function(e) {
     op(e);
@@ -56,9 +57,7 @@ sendchannel.onmessage = function(e) {
 };
 sendchannel.onopen = function(e) {
     op(e);
-    id("info-area").style.display = "none";
-    id("chat-area").style.display = "block";
-    id("connection-button-wrapper").style.opacity = 0;
+    id("chat-log").innerHTML = "Success! "+JSON.stringify(e);
     sendchannel.send("init");
 };
 sendchannel.onclose = function(e) {
@@ -67,34 +66,38 @@ sendchannel.onclose = function(e) {
 
 function host(callback) {
     connection.createOffer(function(answer) {
+        op(answer);
         connection.setLocalDescription(answer, function() {
+            op(connection);
             callback(connection.localDescription);
         }, op);
     }, op);
-}
+} // function host
 
 function join(data, callback) {
+    op({"join called": data});
     var description = new RTCSessionDescription(data);
+    op({"description object": description});
+
     connection.setRemoteDescription(description, function() {
+        op("remote description set");
         connection.createAnswer(function(answer) {
+            op({"created answer": answer});
             connection.setLocalDescription(answer, function() {
                 callback(answer);
             }, op);
         }, op);
-    });
-}
+    }, op);
 
+} // function join
 
-// application logic
-
-document.addEventListener("DOMContentLoaded", function(e) {
+function init() {
 
     var buttonwrapper = id("connection-button-wrapper");
     var buttonstart   = id("button-startsession");
     var buttonjoin    = id("button-joinsession");
-    var infoarea      = id("info-area");
-    var upperspacer   = id("upper-spacer");
     var introtext     = id("intro-text");
+    var infoarea      = id("info-area");
     var sitecontent   = id("site-content");
 
     function showerror(message) {
@@ -108,14 +111,14 @@ document.addEventListener("DOMContentLoaded", function(e) {
 
     // button: create a session
     buttonstart.onclick = function(e) {
-        introtext.innerHTML = "";
         buttonstart.disabled = true;
         buttonjoin.disabled = true;
-        sitecontent.style.flexGrow = 0;
+        introtext.remove();
 
         try {
             host(function(description) {
                 var hostarea = document.createElement("div");
+                hostarea.classList.add("info-area");
                 var info1 = document.createElement("div");
                 info1.innerHTML = "Share your connection key below. <em>(Improved usability options are planned.)</em>";
                 hostarea.appendChild(info1);
@@ -132,11 +135,16 @@ document.addEventListener("DOMContentLoaded", function(e) {
                 input2.addEventListener("input", function(e) {
                     moreinfo.innerHTML = "";
                     try {
-                        var description = new RTCSessionDescription(JSON.parse(LZString.decompressFromBase64(input2.value.trim())));
-                        connection.setRemoteDescription(description);
+                        var description = new RTCSessionDescription(JSON.parse(LZString.decompressFromBase64(input2.value)));
+                    }
+                    catch(e) {
+                        op(e);
+                        op("Couldn't connect with the given connection key.");
+                    }
+                    op(description);
+                    connection.setRemoteDescription(description, function() {
                         // Connection successful!
                         input2.setAttribute("readonly", "readonly");
-
                         var wrap = document.createElement("div");
                         var spinner = document.createElement("div");
                         spinner.classList.add("spinner");
@@ -148,12 +156,10 @@ document.addEventListener("DOMContentLoaded", function(e) {
                         spinner.appendChild(bounce2);
                         wrap.appendChild(spinner);
                         infoarea.appendChild(wrap);
-
-                    }
-                    catch(e) {
+                    }, function(e) {
                         op(e);
-                        moreinfo.innerHTML = "Couldn't connect with the given connection key.";
-                    }
+                        op("Couldn't connect with the given connection key.");
+                    });
                 });
                 hostarea.appendChild(input2);
                 hostarea.appendChild(moreinfo);
@@ -171,10 +177,9 @@ document.addEventListener("DOMContentLoaded", function(e) {
 
     // button: join a session
     buttonjoin.onclick = function(e) {
-        introtext.innerHTML = "";
         buttonstart.disabled = true;
         buttonjoin.disabled = true;
-        sitecontent.style.flexGrow = 0;
+        introtext.remove();
 
         var joinarea = document.createElement("div");
         joinarea.style.display = "none";
@@ -199,7 +204,8 @@ document.addEventListener("DOMContentLoaded", function(e) {
             info.remove();
             input2.remove();
             try {
-                join(JSON.parse(LZString.decompressFromBase64(input.value.trim())), function(answer){
+                join(JSON.parse(LZString.decompressFromBase64(input.value)), function(answer){
+                    op(answer);
                     input2.innerHTML = LZString.compressToBase64(JSON.stringify(answer));
                 });
                 joinarea.appendChild(info);
@@ -214,7 +220,7 @@ document.addEventListener("DOMContentLoaded", function(e) {
     };
     
     id("complain-text").addEventListener("click", function(e) {
-        infobox("<p>MANUAL HANDSHAKES ARE THE BEST HANDSHAKES, OK!?</p><p>No complaints accepted here.</p>");
+        infobox("<p>MANUAL HANDSHAKES ARE THE BEST HANDSHAKES.</p><p>No complaints here.</p>");
     });
 
     if(window.location.hash) {
@@ -225,4 +231,11 @@ document.addEventListener("DOMContentLoaded", function(e) {
             id("button-joinsession").click();
         }
     }
-});
+
+} // function init
+
+
+if(document.readyState === "loading") 
+    document.addEventListener("DOMContentLoaded", init);
+else init();
+
